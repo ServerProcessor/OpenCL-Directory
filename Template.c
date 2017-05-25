@@ -11,7 +11,7 @@
 #endif
 
 int main() {
-cl_platform_id platform;
+cl_platform_id platform; /* For the platform ID */
 cl_device_id device;
 cl_context context;
 cl_command_queue queue;
@@ -37,7 +37,15 @@ correct[3]  += mat[i+12] * vec[i];
 }
   
 clGetPlatformIDs(1, &platform, NULL);
-  /* 1 = The number of cl_platform_id entries that can be added to platforms , &platform = Returns a list of OpenCL platforms found.The cl_platform_id values returned in platforms can be used to identify a specific OpenCL platform. , NULL = Returns the number of OpenCL platforms available. If num_platforms is NULL, this argument is ignored. */
+  /* 1 = The number of cl_platform_id entries that can be added to platforms and identifies the maximum number of platforms you’re interested in
+detecting. 0 will give an error , &platform = Returns a list of OpenCL platforms found.The cl_platform_id values returned in platforms can be used to identify a specific OpenCL platform. , NULL = Returns the number of OpenCL platforms available. If num_platforms is NULL, this argument is ignored. The return value is an integer
+that identifies whether the function successfully detected one or more platforms.*/
+  /* 1 = What I want and NULL = What is available */
+ /*First, despite the name, this func-
+tion doesn’t return cl_platform_id structures. Instead, it places cl_platform_id
+structures in the memory referenced by platforms.*/ 
+  
+  
 clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1,
                /* platform = Refers to the platform ID returned by clGetPlatformIDs, CL_DEVICE_TYPE_GPU = See Doc , 1 = The number of cl_device entries that can be added to devices. , &device = A list of OpenCL devices found, NULL = Ignore */ 
 &device, NULL);
