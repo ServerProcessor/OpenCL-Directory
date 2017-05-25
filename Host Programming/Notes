@@ -1,0 +1,31 @@
+1- Primitive Data Types for Host Applications ( Number is in Bits ) : 
+
+cl_char 8 Signed two’s complement integer
+cl_uchar 8 Unsigned two’s complement integer
+cl_short 16 Signed two’s complement integer
+cl_ushort 16 Unsigned two’s complement integer
+cl_int 32 Signed two’s complement integer
+cl_uint 32 Unsigned two’s complement integer
+cl_long 64 Signed two’s complement integer
+cl_ulong 64 Unsigned two’s complement integer
+cl_half 16 Half-precision floating-point value
+cl_float 32 Single-precision floating-point value
+cl_double 64 Double-precision floating-point value
+
+These types are declared in CL /cl_platform.h
+
+2- Let’s say your computer has two graphics cards—one from AMD and one from Nvidia—and you’ve installed AMD ’s SDK and Nvidia’s SDK.
+In this situation, you may want to select which GPU should process your data. To make this possible, you need to identify a 
+specific vendor’s Open CL implementation in code. Open CL handles both scenarios by providing the cl_platform_id data structure.
+
+3- Each cl_platform_id structure represents a different Open CL implementation(called a platform) installed on the host. If you’ve
+installed two SDK s, you’ll have two platforms installed, and your code will detect two cl_platform_id structures.
+
+4- In code, working with platforms is a two-step process. First you need to allocate memory for one or more cl_platform_id
+structures. Then you need to call clGetPlatformIDs to initialize these structures. This is usually one of the first functions 
+you’ll call in your Open CL code.
+
+5- The clGetPlatformIDs function provides an array of cl_platform_id structures, but it doesn’t tell you anything about the
+platforms themselves. If you want to know what Open CL version a platform supports or which vendor created it, you need to call a
+second function called clGetPlatformInfo. Read documentation if you need it.
+
