@@ -1,0 +1,10 @@
+1- Compliant software and hardware can provide capabilities beyond those defined in the standard. These additional features are
+made available to Open CL applications through extensions.
+
+2- There are two main types of extensions: those that relate to a vendor’s software package (called a platform) and those that 
+relate to spe-cific devices.
+
+3- If an extension has been approved by the Open CL working group, its name will take the form cl_khr_<name>
+
+4- If it has been released by a vendor but has not been approved by the working group, the extension’s name will be 
+cl_<vendor>_<name> 
