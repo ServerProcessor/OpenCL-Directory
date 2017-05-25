@@ -1,5 +1,6 @@
 #define PROGRAM_FILE "matvec.cl"
 #define KERNEL_FUNC "matvec_mult"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -8,6 +9,7 @@
 #else
 #include <CL/cl.h>
 #endif
+
 int main() {
 cl_platform_id platform;
 cl_device_id device;
@@ -32,11 +34,16 @@ correct[0]  += mat[i] * vec[i];
 correct[1]  += mat[i+4] * vec[i];
 correct[2]  += mat[i+8] * vec[i];
 correct[3]  += mat[i+12] * vec[i];
+}
+  
 clGetPlatformIDs(1, &platform, NULL);
+  /* 1 = The number of cl_platform_id entries that can be added to platforms , &platform = Returns a list of OpenCL platforms found.The cl_platform_id values returned in platforms can be used to identify a specific OpenCL platform. , NULL = Returns the number of OpenCL platforms available. If num_platforms is NULL, this argument is ignored. */
 clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1,
+               /* platform = Refers to the platform ID returned by clGetPlatformIDs, CL_DEVICE_TYPE_GPU = See Doc , 1 = The number of cl_device entries that can be added to devices. , &device = A list of OpenCL devices found, NULL = Ignore */ 
 &device, NULL);
 context = clCreateContext(NULL, 1, &device, NULL,
 NULL, &err);
+  
 program_handle = fopen(PROGRAM_FILE, "r");
 fseek(program_handle, 0, SEEK_END);
 program_size = ftell(program_handle);
@@ -46,12 +53,15 @@ program_buffer[program_size] = '\0';
 fread(program_buffer, sizeof(char), program_size,
 program_handle);
 fclose(program_handle);
+  
 program = clCreateProgramWithSource(context, 1,
 (const char**)&program_buffer, &program_size, &err);
 free(program_buffer);
 clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
+  
 kernel = clCreateKernel(program, KERNEL_FUNC, &err);
 queue = clCreateCommandQueue(context, device, 0, &err);
+  
 mat_buff = clCreateBuffer(context, CL_MEM_READ_ONLY |
 CL_MEM_COPY_HOST_PTR, sizeof(float)*16, mat, &err);
 vec_buff = clCreateBuffer(context, CL_MEM_READ_ONLY |
@@ -66,13 +76,15 @@ clEnqueueNDRangeKernel(queue, kernel, 1, NULL,
 &work_units_per_kernel, NULL, 0, NULL, NULL);
 clEnqueueReadBuffer(queue, res_buff, CL_TRUE, 0,
 sizeof(float)*4, result, 0, NULL, NULL);
-if((result[0] == correct[0]) && (result[1] == correct[1])
+
+  if((result[0] == correct[0]) && (result[1] == correct[1])
 && (result[2] == correct[2]) && (result[3] == correct[3])) {
 printf("Matrix-vector multiplication successful.\n");
 }
 else {
 printf("Matrix-vector multiplication unsuccessful.\n");
 }
+  
 clReleaseMemObject(mat_buff);
 clReleaseMemObject(vec_buff);
 clReleaseMemObject(res_buff);
